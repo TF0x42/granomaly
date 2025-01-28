@@ -1,0 +1,53 @@
+#Provider
+vsphere_user = ""
+vsphere_password = ""
+vsphere_server = ""
+
+#Infrastructure
+vsphere_datacenter = ""
+vsphere_host = ""
+vsphere_compute_cluster = ""
+vsphere_datastore = ""
+vsphere_network = ""
+
+#VM
+vm_template_name = "template-ubuntu-22-04-5"
+vm_guest_id = "ubuntu64Guest"
+vm_vcpu	= "4"
+vm_memory	= "4096"
+vm_ipv4_netmask	 = "24"
+vm_ipv4_gateway	 = "10.0.50.254"
+vm_dns_servers = ["10.0.50.254"]
+vm_disk_label  = "disk0"
+vm_disk_size  = "50"
+vm_disk_thin = "true"
+vm_domain	= ""
+vm_firmware = "efi"
+
+vms = {
+  lab-1 = {
+    name                = "lab-1"
+    vm_ip               = "10.0.50.11"
+  }
+#   },
+#   lab-2 = {
+#     name                = "lab-2"
+#     vm_ip               = "10.0.50.12"
+#   },
+#   lab-3 = {
+#     name                = "lab-3"
+#     vm_ip               = "10.0.50.13"
+#   },
+#   lab-4 = {
+#     name                = "lab-4"
+#     vm_ip               = "10.0.50.14"
+#   },
+#   lab-5 = {
+#     name                = "lab-5"
+#     vm_ip               = "10.0.50.15"
+#   },
+#   lab-6 = {
+#     name                = "lab-6"
+#     vm_ip               = "10.0.50.16"
+#   }
+}

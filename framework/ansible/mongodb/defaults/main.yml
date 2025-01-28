@@ -1,0 +1,5 @@
+---
+mongodb_version: "7.0"
+mongodb_repo_url: "https://repo.mongodb.org/apt/ubuntu"
+mongodb_repo_arch: "amd64" #amd64,arm64
+mongodb_repo_component: "multiverse"

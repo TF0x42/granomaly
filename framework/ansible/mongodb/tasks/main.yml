@@ -1,0 +1,38 @@
+---
+# This task installs MongoDB on an Ubuntu machine
+
+- name: Add MongoDB GPG key
+  apt_key:
+    url: https://www.mongodb.org/static/pgp/server-7.0.asc
+    state: present
+
+- name: Add MongoDB repository
+  apt_repository:
+    repo: "deb [ arch={{mongodb_repo_arch}} ] {{mongodb_repo_url}} {{ ansible_distribution_release }}/mongodb-org/{{ mongodb_version }} multiverse"
+    state: present
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400  # 24 Stunden in Sekunden
+  when: ansible_os_family == "Debian"
+
+- name: Install MongoDB packages
+  apt:
+    name: mongodb-org
+    state: present
+  notify:
+    - Start MongoDB
+
+- name: Copy MongoDB configuration file
+  template:
+    src: mongod.conf.j2
+    dest: /etc/mongod.conf
+  notify:
+    - Restart MongoDB
+
+- name: Ensure MongoDB is started and enabled on boot
+  systemd:
+    name: mongod
+    enabled: yes
+    state: started

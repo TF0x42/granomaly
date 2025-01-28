@@ -1,0 +1,14 @@
+---
+# Handlers for MongoDB
+
+- name: Start MongoDB
+  systemd:
+    name: mongod
+    state: started
+    enabled: yes
+
+- name: Restart MongoDB
+  systemd:
+    name: mongod
+    state: restarted
+    enabled: yes

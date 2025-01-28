@@ -1,0 +1,49 @@
+#cloud-config
+autoinstall:
+    version: 1
+    early-commands:
+        # Stop ssh for packer
+        - sudo systemctl stop ssh
+    locale: en_US
+    keyboard:
+        layout: de
+    identity:
+        hostname: ubuntu-server
+        username: template-admin
+        password: '$6$rounds=4096$CWmZIEVTY$woM6r7wC12UmqmmBgmho/vaQdesGsjS9CMKTPEOdnkxuPPuFKfVLkgbp1CYzZgtVMqOTrmSJZN7RosDVCWJId0'
+    ssh:
+        install-server: yes
+        allow-pw: yes
+    storage:
+        layout:
+            name: direct
+    apt:
+        geoip: true
+        primary:
+            - arches: [i386, amd64]
+              uri: "http://archive.ubuntu.com/ubuntu"
+    packages:
+        - ca-certificates
+        - curl
+        - unzip
+        - openssh-server
+        - util-linux-extra
+        - open-vm-tools
+        - cloud-init
+    user-data:
+        disable_root: false
+        ssh_import_id: [ "gh:schwankner" ]
+    late-commands:
+        - sed -i -e 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/g' /target/etc/ssh/sshd_config
+        - sed -i -e 's/^#\?PermitRootLogin.*/PermitRootLogin yes/g' /target/etc/ssh/sshd_config
+        - echo 'template-admin ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/template-admin
+        - curtin in-target --target=/target -- vmware-toolbox-cmd config set deployPkg enable-custom-scripts true
+        - curtin in-target --target=/target -- chmod 440 /etc/sudoers.d/template-admin
+        - curtin in-target --target=/target -- apt-get update
+        - curtin in-target --target=/target -- apt-get upgrade --yes
+        # Generate new SSH host keys
+        - curtin in-target --target=/target -- rm -f /etc/ssh/ssh_host_*
+        - curtin in-target --target=/target -- dpkg-reconfigure openssh-server
+        # Restart SSH to apply new keys
+        - curtin in-target --target=/target -- systemctl restart ssh
+

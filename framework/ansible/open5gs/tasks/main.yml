@@ -1,0 +1,92 @@
+---
+# tasks file for open5gs
+- name: Update apt packages
+  become: true
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400  # 24 Stunden in Sekunden
+
+- name: Add Open5Gs Repo
+  become: true
+  apt_repository:
+    repo: 'ppa:open5gs/latest'
+    state: present
+
+- name: Install open5gs
+  apt:
+    name: open5gs
+    state: present
+
+- name: Deaktiviere alle Open5GS-Services
+  systemd:
+    name: "{{ item }}"
+    enabled: no
+    state: stopped
+  with_items:
+    - open5gs-amfd
+    - open5gs-ausfd
+    - open5gs-bsfd
+    - open5gs-hssd
+    - open5gs-mmed
+    - open5gs-nrfd
+    - open5gs-nssfd
+    - open5gs-pcfd
+    - open5gs-pcrfd
+    - open5gs-scpd
+    - open5gs-seppd
+    - open5gs-sgwcd
+    - open5gs-sgwud
+    - open5gs-smfd
+    - open5gs-udmd
+    - open5gs-udrd
+    - open5gs-upfd
+
+- name: Konfiguriere Services, falls aktiviert
+  template:
+    src: "{{ item }}.yaml.j2"
+    dest: "/etc/open5gs/{{ item }}.yaml"
+  when: "item in open5gs_services"
+  loop:
+    - amf
+    - ausf
+    - bsf
+    - hss
+    - mme
+    - nrf
+    - nssf
+    - pcf
+    - pcrf
+    - scp
+    - sepp
+    - sgwc
+    - sgwu
+    - smf
+    - udm
+    - udr
+    - upf
+
+- name: Starte und aktiviere Open5GS-Services, falls aktiviert
+  systemd:
+    name: "open5gs-{{ item }}d"
+    enabled: yes
+    state: started
+  when: "item in open5gs_services"
+  loop:
+    - amf
+    - ausf
+    - bsf
+    - hss
+    - mme
+    - nrf
+    - nssf
+    - pcf
+    - pcrf
+    - scp
+    - sepp
+    - sgwc
+    - sgwu
+    - smf
+    - udm
+    - udr
+    - upf
+

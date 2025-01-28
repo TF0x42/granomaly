@@ -1,0 +1,3 @@
+#!/bin/bash
+export PACKER_HOST_ARCH=$(uname -m)
+PACKER_LOG=1 packer build -var "host_arch=$PACKER_HOST_ARCH" -var-file="variables.pkrvars.hcl" qemu.auto.pkr.hcl

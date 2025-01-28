@@ -1,0 +1,14 @@
+vsphere_server     = ""
+vsphere_username   = ""
+vsphere_password   = ""
+vsphere_insecure_connection = "false"
+vsphere_datacenter = ""
+vsphere_host       = ""
+vsphere_network    = ""
+vsphere_datastore  = ""
+vsphere_folder     = ""
+
+# ssh username/password.  If changed below, also change in /html/user-data.  Password can be generated with `mkpasswd -m SHA-512 --rounds=4096`
+# SSH username (created in user-data. If you change it here the please also adjust in ./html/user-data)
+ssh_username       = "template-admin"
+ssh_password       = "VMware1!"

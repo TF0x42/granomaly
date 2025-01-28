@@ -1,0 +1,12 @@
+---
+- hosts: open5gs
+  become: true
+  roles:
+#    - mongodb
+    - open5gs
+#- hosts: nrf
+#  become: true
+#  roles:
+#    - role: open5gs
+#      vars:
+#        scp: "10.0.50.x"
